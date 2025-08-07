@@ -1,0 +1,29 @@
+services:
+  library-api:
+    build:
+      context: ./library-service
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    env_file:
+      - .env
+    environment:
+      PORT: ${PORT}
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:14.18
+    ports:
+      - 6000:5432
+    restart: always
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - data:/var/lib/postgresql/data
+volumes:
+  data:
